@@ -23,5 +23,9 @@ class PagesController extends Controller
         );
         return view ('pages.services')->with($data);
     }
+    public function portfolio(){
+        $title = 'Welkom op de Portfolio pagina';
+        return view ('pages.portfolio')->with('title',$title);
+    }
     
 }
