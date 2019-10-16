@@ -18,10 +18,10 @@ Route::get('/portfolio', 'PagesController@portfolio');
 
 Route::resource('posts', 'PostController');
 
-
-
-
 Auth::routes();
 
-Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
-Route::get('/admin', 'AdminController@index');
+Route::get('/dashboard', 'DashboardController@index')->name('dasboard'); 
+Route::get('/admin', 'AdminController@index')->name('admin.dashboard');
+ Route::get('/admin/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
+Route::Post('/admin/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
+

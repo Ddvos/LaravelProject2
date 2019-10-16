@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Support\Arr;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -13,6 +15,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
+  
         //
     ];
 
@@ -48,4 +51,25 @@ class Handler extends ExceptionHandler
     {
         return parent::render($request, $exception);
     }
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['message' => $exception->getMessage()], 401);
+        }
+     
+        $guard = Arr::get($exception->guards(), 0);
+        
+        switch ($guard) {
+            case 'admin':
+                $route = 'admin.login';
+                break;
+           default:
+                $route = 'login';
+        }
+    
+        return redirect()->guest(route($route));
+    }
+
+
 }
