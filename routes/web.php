@@ -18,7 +18,16 @@ Route::get('/portfolio', 'PagesController@portfolio');
 
 Route::resource('posts', 'PostController');
 
+Route::get('/search', 'Postcontroller@search');
+
+//comments
+Route:: post('comments/{post_id}',['uses'=> 'CommentsController@store', 'as'=> 'comments.store']);
+Route:: Post('/postcheck', 'PostController@check')->name('post.check');
+
+
 Auth::routes();
+
+
 
 Route::get('/dashboard', 'DashboardController@index')->name('dasboard'); 
 Route::get('/admin', 'AdminController@index')->name('admin.dashboard');

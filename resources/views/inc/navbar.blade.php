@@ -18,10 +18,7 @@
                 <li class="nav-item"><a class="nav-link" href="/portfolio">Portfolio</a></li>
                 <li class="nav-item"><a class="nav-link" href="/posts">Videos</a></li>
               </ul>
-              <ul class="nav navbar-nav navbar-right">
-                <li class="nav-item"><a class="nav-link" href="/posts/create">Create Post</a></li>
               
-              </ul>
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
@@ -35,7 +32,9 @@
                             <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                         </li>
                     @endif
-                @else
+                @endguest
+                @auth
+                
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }} <span class="caret"></span>
@@ -44,7 +43,13 @@
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 
-                            <a class="dropdown-item" href="/dashboard">Dashboard</a>
+                             @if (Auth::guard('admin')->user())
+                                <a class="dropdown-item" href="/admin">Dashboard</a>
+                                @else
+                                <a class="dropdown-item" href="/dashboard">Dashboard</a>
+                            @endif
+
+                            
                             
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
@@ -60,7 +65,7 @@
 
                         </div>
                     </li>
-                @endguest
+                @endauth
             </ul>
         </div>
     </div>

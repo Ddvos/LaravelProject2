@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 class PagesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('guest',  ['only' => ['show', 'index']]);
+    }
     public function index(){
 
         $title = 'Welkom Dominique!';

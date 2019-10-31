@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use App\Admin;
+use App\Post;
 use App\User;
+use Auth;
 
 class AdminController extends Controller
 {
@@ -14,7 +16,7 @@ class AdminController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:admin');
+       $this->middleware('auth:admin');
     }
 
     /**
@@ -22,8 +24,28 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+    public function store(Request $request)
+    {
+        if ($request->has('check') === 'yes') {
+            // checked
+
+            return view('pages.about');
+            // $post = Post::find($id);
+            // $post->check = 1;
+            // $post->save();
+        } else {
+            // unchecked
+        }
+    }
     public function index()
     {
-        return view('admin');
+       
+        $posts = Post::all();
+    //    $user_id = auth()->user()->id;
+    //    $user = User::find($user_id);  
+        return view('admin')->withPosts($posts);
     }
+
+   // Auth::guard('admin')->user())
 }

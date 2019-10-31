@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Comment;
 
 class DashboardController extends Controller
 {
@@ -24,8 +25,11 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $user_id = auth()->user()->id;
-        $user = User::find($user_id);
-        return view('dashboard')->with('posts', $user->posts);
+         $user_id = auth()->user()->id;
+         $user = User::find($user_id);
+         return view('dashboard')->with('comments', $user->comments);
+
+        // $comments = Comment::all();
+        // return view('dashboard')->with('comments',$comments);
     }
 }

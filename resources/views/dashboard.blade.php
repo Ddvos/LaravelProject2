@@ -14,10 +14,12 @@
                         </div>
                     @endif
 
-                    <a href="/posts/create" class=" btn btn-primary">Create a new post</a>
-                   <h3>Your Blog posts</h3>
+                   <h3>Your comments</h3> 
 
-                   @if(count($posts)> 0)
+                   
+                {{-- @if(Auth::user()->id == $post->user_id) --}}
+
+                    @if(count($comments)> 0)
                     <table class="table table-striped">
                         
                         <tr>
@@ -26,19 +28,14 @@
                             <th></th>
                         </tr>
 
-                        @foreach ($posts as $post)
+                       @foreach ($comments as $comment)
                         <tr>
-                                <td>{{$post->title}}</td>
-                                <td><a href="/posts/{{$post->id}}/edit" class="btn btn-default">Edit</a></td>
-                                <td>
-                                    {!!Form::open(['action' =>['PostController@destroy', $post->id],'method'=>'POST','class'=>'pull-right'])!!}
-                                        {{Form::hidden('_method', 'DELETE')}}
-                                        {{Form::submit('Delete',['class' =>'btn btn-danger'])}}
-                                    {!!Form::close()!!}
-                                </td>
-                            </tr>
+                                <td><a href="/posts/{{$comment->post_id}}">{{$comment->post_id}}</a></td>
+                                <td>{{$comment->comment}}</td>       
+                            </tr> 
                         @endforeach
                     </table>
+                     
                     @else
                          <p>You have no posts</p>
                    @endif

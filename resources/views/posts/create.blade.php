@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Maak hier een nieuwe post aan</h1>
-    <p> Hi I am Dominiqueee</p> 
+    <p>wellkom  {{Auth::guard('admin')->user()->name}}</p> 
 
     {!! Form::open(['action'=>'PostController@store','method'=>'POST']) !!}
      <div class="form-group">

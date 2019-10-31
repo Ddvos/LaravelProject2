@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Post;
 use App\User;
+use App\Admin;
+use Auth;
 
 class PostController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+       // $this->middleware('guest',  ['only' => ['show', 'index']]);
     }
     /**
      * Display a listing of the resource.
@@ -19,7 +21,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::where('check', 1)->get();
         return view('posts.index')->with('posts',$posts);
     }
 
@@ -30,7 +32,33 @@ class PostController extends Controller
      */
     public function create()
     {
+        
         return view('posts.create');
+    }
+
+    public function search(Request $request){
+
+        $search = $request->get('search');
+        $posts = Post::where('title','like','%'.$search.'%')->paginate(5);
+        return view('posts.index',['posts' => $posts]);
+    }
+
+    public function check(Request $request){
+        
+        $post = Post::find($request->input('check')); 
+
+        if ($post->check){
+
+            $post->check = 0;  
+            $post->save();
+        }else {
+
+            $post->check = 1;
+            $post->save();
+        }
+
+
+        return redirect('/admin');
     }
 
     /**
@@ -46,11 +74,13 @@ class PostController extends Controller
             'body' => 'required'
         ]);
 
+        
+
         // create post store in the database
         $post = new Post;   
         $post->title =$request->input('title');
         $post->body =$request->input('body');  
-        $post->user_id= auth()->user()->id; 
+        $post->user_id= Auth::guard('admin')->user()->id; 
         $post->save(); 
 
         return redirect('/posts')->with('succes', 'Post Created');
@@ -82,11 +112,14 @@ class PostController extends Controller
         $post = Post::find($id);
 
         // check for correct user
-        if (auth()->user()->id !== $post->user_id){
+      
+
+        if ( Auth::guard('admin')->user()){
+                 return view('posts.edit')->with('post',$post);
+        }
+        else{
             return redirect('/posts')->with('error', 'Unauthorized Page');
         }
-
-        return view('posts.edit')->with('post',$post);
     }
 
     /**
@@ -123,7 +156,7 @@ class PostController extends Controller
         $post =Post::find($id);
 
           // check for correct user
-          if (auth()->user()->id !== $post->user_id){
+          if ( Auth::guard('admin')->user()->id !== $post->user_id){
             return redirect('/posts')->with('error', 'Unauthorized Page');
         }
         
