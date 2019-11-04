@@ -25,9 +25,13 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        
          $user_id = auth()->user()->id;
          $user = User::find($user_id);
-         return view('dashboard')->with('comments', $user->comments);
+
+       $super_user = auth()->user()->super_user;
+
+         return view('dashboard')->with('comments', $user->comments)->with('super_user', $super_user);
 
         // $comments = Comment::all();
         // return view('dashboard')->with('comments',$comments);

@@ -27,9 +27,9 @@
     @endif
 
     @if (Auth::guard('admin')->user())
-  <p>Hallo Admin</p>
+        <p>Hallo Admin</p>
     @else
      <p>Hallo guest</p>
-@endif
+    @endif
 @endsection
 

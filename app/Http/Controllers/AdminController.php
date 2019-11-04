@@ -42,9 +42,10 @@ class AdminController extends Controller
     {
        
         $posts = Post::all();
+        $users = User::all();
     //    $user_id = auth()->user()->id;
     //    $user = User::find($user_id);  
-        return view('admin')->withPosts($posts);
+        return view('admin')->withPosts($posts)->withUsers($users);
     }
 
    // Auth::guard('admin')->user())

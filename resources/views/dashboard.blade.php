@@ -23,16 +23,24 @@
                     <table class="table table-striped">
                         
                         <tr>
-                            <th> Title</th>
-                            <th></th>
-                            <th></th>
+                            <th> Post id</th>
+                            <th> Comment</th>
+                            <th>@if($super_user) Delete  @endif </th>
                         </tr>
 
                        @foreach ($comments as $comment)
                         <tr>
                                 <td><a href="/posts/{{$comment->post_id}}">{{$comment->post_id}}</a></td>
-                                <td>{{$comment->comment}}</td>       
-                            </tr> 
+                                <td>{{$comment->id}}</td>   
+                                
+                                <td>@if($super_user) 
+                                    {!!Form::open(['action' =>['CommentsController@destroy', $comment->id],'method'=>'DELETE','class'=>'pull-right'])!!}
+                                        {{Form::hidden('_method', 'DELETE')}}
+                                        {{Form::submit('Delete',['class' =>'btn btn-danger'])}}
+                                    {!!Form::close()!!}
+                                    @endif
+                                </td> 
+                     </tr> 
                         @endforeach
                     </table>
                      

@@ -25,11 +25,13 @@ Route:: post('comments/{post_id}',['uses'=> 'CommentsController@store', 'as'=> '
 Route:: Post('/postcheck', 'PostController@check')->name('post.check');
 
 
+
+
 Auth::routes();
 
 
-
 Route::get('/dashboard', 'DashboardController@index')->name('dasboard'); 
+Route::delete('/dashboard/{id}', 'CommentsController@destroy');
 Route::get('/admin', 'AdminController@index')->name('admin.dashboard');
  Route::get('/admin/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
 Route::Post('/admin/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Post;
 use App\User;
 use App\Admin;
+use App\Comment;
 use Auth;
 
 class PostController extends Controller
@@ -21,7 +22,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::where('check', 1)->get();
+        $posts = Post::where('check', 1)->get();   // showed only the post which are acctive/cheked
         return view('posts.index')->with('posts',$posts);
     }
 
@@ -38,8 +39,8 @@ class PostController extends Controller
 
     public function search(Request $request){
 
-        $search = $request->get('search');
-        $posts = Post::where('title','like','%'.$search.'%')->paginate(5);
+        $search = $request->get('search');  
+        $posts = Post::where('title','like','%'.$search.'%')->get();   // search in de post table
         return view('posts.index',['posts' => $posts]);
     }
 
@@ -47,11 +48,11 @@ class PostController extends Controller
         
         $post = Post::find($request->input('check')); 
 
-        if ($post->check){
+        if ($post->check){    // if post is checked it will un check the post so its turned off
 
             $post->check = 0;  
             $post->save();
-        }else {
+        }else {              // if post is checked it will check it so it will turn on
 
             $post->check = 1;
             $post->save();
@@ -73,7 +74,7 @@ class PostController extends Controller
             'title' => 'required',
             'body' => 'required'
         ]);
-
+       
         
 
         // create post store in the database

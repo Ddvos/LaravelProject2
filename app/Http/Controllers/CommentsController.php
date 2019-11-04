@@ -45,6 +45,7 @@ class CommentsController extends Controller
             'comment' => 'required|max:2000',
         ));
 
+        // sets the user_id = to admin or user so the comment is stored at the right place 
         if (Auth::guard('admin')->user()){
             $user_id = Auth::guard('admin')->user()->id;
         }
@@ -52,8 +53,20 @@ class CommentsController extends Controller
             $user_id = auth()->user()->id;
         }
 
-        $post = Post::find($post_id);
+         // count comments user made if more then 5 comments made a user is a super user
+         $count_posts = Comment::where('user_id', $user_id)->count();
 
+        if( $count_posts > 4){
+
+            $user = User::find($user_id);   
+            $user->super_user = true; 
+            $user->save();
+        }
+        
+        
+
+        /// store the new comments
+        $post = Post::find($post_id);
         $comment = new Comment();
         $comment->comment = $request->comment;
         $comment->user_id = $user_id; 
@@ -64,7 +77,7 @@ class CommentsController extends Controller
 
         Session::flash('succes', 'Comment was added');
 
-        return redirect('/posts');
+        return redirect()->to('posts/'.$post_id);
     }
 
     /**
@@ -110,5 +123,15 @@ class CommentsController extends Controller
     public function destroy($id)
     {
         //
+        $comment =Comment::find($id);
+
+          // check for correct user
+          if ( auth()->user()->id !== $comment->user_id){
+            return redirect('/dashboard')->with('error', 'Unauthorized Page');
+        }
+        
+        $comment->delete();
+
+        return redirect('/dashboard')->with('succes', 'Comment Removed');
     }
 }
